@@ -2,7 +2,7 @@
 
 const express = require("express");
 const methodOverride = require("method-override");
-
+const mongoose = require("mongoose");
 
 // Initialize application
 
@@ -16,6 +16,29 @@ require("dotenv").config();
 
 const PORT = process.env.PORT;
 
+// Database connection
+
+// capitalize constant variables
+const DATABASE_URL= process.env.DATABASE_URL;
+
+mongoose.connect(DATABASE_URL);
+
+// Database Connection Error/Success
+// Define callback functions for various events
+
+const db = mongoose.connection;
+
+db.on("error", (err) => {
+    console.log(err.message + " is mongo not running?");
+});
+
+db.on("connected", () => {
+    console.log("mongoDB connected");
+});
+
+db.on("disconnected", () => {
+    console.log('mongoDB disconnected');
+});
 
 // Mount middleware
 
