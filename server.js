@@ -56,25 +56,14 @@ app.use(methodOverride("_method"));
 
 // index route
 app.get("/books", (req, res) => {
-    Book.find({}, (error, allBooks) => {
-        res.render("index.ejs", {
-            books: allBooks,
-        });
+    Book.find({}, (error, books) => {
+        res.render("index.ejs", {books});
     })
 });
 
 // new route
 app.get("/books/new", (req, res) => {
     res.render("new.ejs");
-});
-
-// show route
-app.get("/books/:id", (req, res) => {
-    Book.findById(req.params.id, (err, foundBook) => {
-        res.render("show.ejs", {
-            book: foundBook,
-        });
-    });
 });
 
 // create route
@@ -90,9 +79,14 @@ app.post("/books", (req, res) => {
     Book.create(req.body, (err, createdBook) => {
         res.redirect("/books");
     });
-    res.send(req.body);
 });
 
+// show route
+app.get("/books/:id", (req, res) => {
+    Book.findById(req.params.id, (err, foundBook) => {
+        res.render("show.ejs", {foundBook});
+    });
+});
 
 // Tell app to listen for client/browser request
 

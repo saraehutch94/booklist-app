@@ -10,8 +10,12 @@
     <nav>
         <a href="/books">Back to Books Index</a>
     </nav>
-    <h1><%=book.title%></h1>
-    <p>Author: <%=book.author%></p>
-    <p>Completed: <%=book.completed%></p>
+    <h1><%=foundBook.title%></h1>
+    <p>Author: <%=foundBook.author%></p>
+    <% if(foundBook.completed) { %>
+        <p>You have finished this book</p>
+    <% } else { %>   
+        <p>You have not finished this book</p> 
+    <% } %>
 </body>
 </html>
