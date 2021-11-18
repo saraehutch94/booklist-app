@@ -17,8 +17,6 @@ require("dotenv").config();
 
 const PORT = process.env.PORT;
 
-console.log(process.env);
-
 // Database connection
 
 // capitalize constant variables
@@ -56,23 +54,41 @@ app.use(methodOverride("_method"));
 
 // Mount routes
 
+// index route
+app.get("/books", (req, res) => {
+    Book.find({}, (error, allBooks) => {
+        res.render("index.ejs", {
+            books: allBooks,
+        });
+    })
+});
+
 // new route
 app.get("/books/new", (req, res) => {
-    res.send("new");
+    res.render("new.ejs");
+});
+
+// show route
+app.get("/books/:id", (req, res) => {
+    Book.findById(req.params.id, (err, foundBook) => {
+        res.render("show.ejs", {
+            book: foundBook,
+        });
+    });
 });
 
 // create route
 app.post("/books", (req, res) => {
     if (req.body.completed === "on") {
     // if checked, req.body.completed is set to "on"
-    req.body.complete = true;
+    req.body.completed = true;
     } else {
     // if not checked, req.body.completed is undefined
     req.body.completed = false;
     }
 
     Book.create(req.body, (err, createdBook) => {
-        res.send(createdBook);
+        res.redirect("/books");
     });
     res.send(req.body);
 });
