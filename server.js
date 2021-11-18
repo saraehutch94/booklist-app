@@ -3,6 +3,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
+const Book = require("./models/book.js");
 
 // Initialize application
 
@@ -15,6 +16,8 @@ const app = express();
 require("dotenv").config();
 
 const PORT = process.env.PORT;
+
+console.log(process.env);
 
 // Database connection
 
@@ -52,6 +55,27 @@ app.use(express.static("public"));
 app.use(methodOverride("_method"));
 
 // Mount routes
+
+// new route
+app.get("/books/new", (req, res) => {
+    res.send("new");
+});
+
+// create route
+app.post("/books", (req, res) => {
+    if (req.body.completed === "on") {
+    // if checked, req.body.completed is set to "on"
+    req.body.complete = true;
+    } else {
+    // if not checked, req.body.completed is undefined
+    req.body.completed = false;
+    }
+
+    Book.create(req.body, (err, createdBook) => {
+        res.send(createdBook);
+    });
+    res.send(req.body);
+});
 
 
 // Tell app to listen for client/browser request
