@@ -54,6 +54,31 @@ app.use(methodOverride("_method"));
 
 // Mount routes
 
+// Seed route
+
+app.get("/books/seed", async (req, res) => {
+    const data = [
+        {
+            title: "The Art of War",
+            author: "Sun Tzu"
+        },
+        {
+            title: "How to Win Friends and Influence People",
+            author: "Dale Carnegie"
+        },
+        {
+            title: "Rich Dad Poor Dad",
+            author: "Robert Kiyosaki"
+        }
+    ]
+    await Book.deleteMany() // --> will destroy all documents in database
+    await Book.create(data);
+    res.redirect("/books");
+    // await Book.create(data, () => {
+    // res.redirect("/books");
+    // });
+});
+
 // index route
 app.get("/books", (req, res) => {
     Book.find({}, (error, books) => {
@@ -66,7 +91,39 @@ app.get("/books/new", (req, res) => {
     res.render("new.ejs");
 });
 
+// delete route
+
+app.delete("/books/:id", (req, res) => {
+    Book.findByIdAndRemove(req.params.id, (error, data) => {
+        res.redirect("/books");
+    });
+});
+
+// update route
+
+app.put("/books/:id", (req, res) => {
+    if (req.body.completed === "on") {
+        req.body.completed = true;
+    } else {
+        req.body.completed = false;
+    }
+
+    // another way to write the logic above:
+    // req.body.completed = !!req.body.completed; --> !!"on" === true || !!undefined === false
+    
+    Book.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {new: true},
+        (error, updatedBook) => {
+            res.redirect(`/books/${req.params.id}`);
+            // redirect to index page: res.redirect("/books");
+        }
+    )
+});
+
 // create route
+
 app.post("/books", (req, res) => {
     if (req.body.completed === "on") {
     // if checked, req.body.completed is set to "on"
@@ -80,6 +137,15 @@ app.post("/books", (req, res) => {
         res.redirect("/books");
     });
 });
+
+// edit route
+
+app.get("/books/:id/edit", (req, res) => {
+    Book.findById(req.params.id, (error, foundBook) => {
+        res.render("edit.ejs", {foundBook});
+    });
+});
+
 
 // show route
 app.get("/books/:id", (req, res) => {
