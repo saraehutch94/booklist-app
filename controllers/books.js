@@ -12,7 +12,7 @@ const Book = require("../models/book");
 
 // Seed route
 
-booksRouter.get("/books/seed", async (req, res) => {
+booksRouter.get("/seed", async (req, res) => {
     const data = [
         {
             title: "The Art of War",
@@ -36,20 +36,20 @@ booksRouter.get("/books/seed", async (req, res) => {
 });
 
 // index route
-booksRouter.get("/books", (req, res) => {
+booksRouter.get("/", (req, res) => {
     Book.find({}, (error, books) => {
         res.render("index.ejs", {books});
     })
 });
 
 // new route
-booksRouter.get("/books/new", (req, res) => {
+booksRouter.get("/new", (req, res) => {
     res.render("new.ejs");
 });
 
 // delete route
 
-booksRouter.delete("/books/:id", (req, res) => {
+booksRouter.delete("/:id", (req, res) => {
     Book.findByIdAndRemove(req.params.id, (error, data) => {
         res.redirect("/books");
     });
@@ -57,7 +57,7 @@ booksRouter.delete("/books/:id", (req, res) => {
 
 // update route
 
-booksRouter.put("/books/:id", (req, res) => {
+booksRouter.put("/:id", (req, res) => {
     if (req.body.completed === "on") {
         req.body.completed = true;
     } else {
@@ -80,7 +80,7 @@ booksRouter.put("/books/:id", (req, res) => {
 
 // create route
 
-booksRouter.post("/books", (req, res) => {
+booksRouter.post("/", (req, res) => {
     if (req.body.completed === "on") {
     // if checked, req.body.completed is set to "on"
     req.body.completed = true;
@@ -96,7 +96,7 @@ booksRouter.post("/books", (req, res) => {
 
 // edit route
 
-booksRouter.get("/books/:id/edit", (req, res) => {
+booksRouter.get("/:id/edit", (req, res) => {
     Book.findById(req.params.id, (error, foundBook) => {
         res.render("edit.ejs", {foundBook});
     });
@@ -104,7 +104,7 @@ booksRouter.get("/books/:id/edit", (req, res) => {
 
 
 // show route
-booksRouter.get("/books/:id", (req, res) => {
+booksRouter.get("/:id", (req, res) => {
     Book.findById(req.params.id, (err, foundBook) => {
         res.render("show.ejs", {foundBook});
     });

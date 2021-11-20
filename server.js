@@ -3,7 +3,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
-const booksRouter = require("./controllers/books");
+const booksController = require("./controllers/books");
 
 // Initialize application
 
@@ -53,8 +53,9 @@ app.use(express.static("public"));
 app.use(methodOverride("_method"));
 
 // mount routes
-
-app.use("/", booksRouter);
+// router middleware is always brought into scope after the regular middleware
+// "/books" --> sets base route, now can take out "books" in each route in books.js
+app.use("/books", booksController);
 
 // Tell app to listen for client/browser request
 
