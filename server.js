@@ -52,6 +52,10 @@ app.use(express.static("public"));
 // method-overriding
 app.use(methodOverride("_method"));
 
+// mount routes
+
+app.use("/", booksRouter);
+
 // Tell app to listen for client/browser request
 
 app.listen(PORT, () => {
