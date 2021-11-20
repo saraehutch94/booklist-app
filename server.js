@@ -3,7 +3,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
-const Book = require("./models/book.js");
+const booksRouter = require("./controllers/books");
 
 // Initialize application
 
